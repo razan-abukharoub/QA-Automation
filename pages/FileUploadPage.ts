@@ -15,8 +15,14 @@ export class FileUploadPage {
     }
 
     async uploadFile(filePath: string) {
-        await this.fileInput.setInputFiles(filePath);
-        await this.uploadButton.click();
+    const fileChooserPromise = this.page.waitForEvent('filechooser');
+
+    await this.fileInput.click();
+
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(filePath);
+
+    await this.uploadButton.click();
     }
 
     async verifyUploadedFile(fileName: string) {
